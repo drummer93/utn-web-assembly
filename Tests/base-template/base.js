@@ -1,9 +1,9 @@
-async function executeWebAssembly (precision=3) {
+async function executeWebAssembly(folder, filename, precision=3) {
     var result;
 
     var t0 = performance.now();
 
-    result = runWebAssembly();
+    result = runWebAssembly(folder, filename);
 
     result.then(function(result) { // Avoid syncronous executation
         var t1 = performance.now();
@@ -13,9 +13,9 @@ async function executeWebAssembly (precision=3) {
     })
 };
 
-async function runWebAssembly () {
+async function runWebAssembly(folder, filename) {
     // Running the WebAssembly from wasm
-    return await fetch('program.wasm')
+    return await fetch('https://raw.githubusercontent.com/ELC/utn-web-assembly/master/Tests/'+ folder +'/' + filename +'.wasm')
     .then(data => data.arrayBuffer())
     .then(buf => WebAssembly.compile(buf))
     .then(mod => WebAssembly.instantiate(mod))
@@ -23,7 +23,7 @@ async function runWebAssembly () {
 };
 
 
-async function executeJS (precision=3) {
+async function executeJS(precision=3) {
     var result;
     
     var t0 = performance.now();
@@ -43,7 +43,7 @@ async function runJS() {
     return await JSmain();
 }
 
-function executeBoth(){    
-    executeWebAssembly();
+function executeBoth(folder, filename){    
+    executeWebAssembly(folder, filename);
     executeJS();
 }
